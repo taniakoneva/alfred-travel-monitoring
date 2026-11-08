@@ -1,0 +1,28 @@
+flowchart TB
+    subgraph EXT_IN["Внешние источники статусов"]
+        AGG["Агрегатор статусов"]
+        MAIL["Рассылки авиакомпаний"]
+    end
+
+    MON["Мониторинг рейсов<br/>нормализация и проверка статусов"]
+    BUS{{"Шина событий<br/>события ждут в очереди"}}
+    ALT["Поиск альтернатив<br/>багаж, визы, таймзоны"]
+    NOTIF["Сервис уведомлений<br/>push, email, SMS"]
+    PLAN["Планировщик поездок<br/>версии плана"]
+    DOC[("Хранилище документов<br/>шифрование и удаление")]
+
+    GDS["API авиакомпаний и GDS"]
+    PROV["Провайдеры push, SMS, email"]
+
+    AGG --> MON
+    MAIL --> MON
+    MON --> BUS
+    BUS <--> ALT
+    BUS <--> NOTIF
+    BUS <--> PLAN
+    ALT <--> GDS
+    NOTIF --> PROV
+    PLAN --> DOC
+
+    classDef external stroke-dasharray: 5 5
+    class AGG,MAIL,GDS,PROV external
