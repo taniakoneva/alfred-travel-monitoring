@@ -1,0 +1,29 @@
+sequenceDiagram
+    autonumber
+    actor U as Пользователь
+    participant SRC as Источник статусов
+    participant MON as Мониторинг рейсов
+    participant BUS as Шина событий
+    participant NOT as Сервис уведомлений
+    participant SRCH as Поиск альтернатив
+    participant PLAN as Планировщик поездок
+
+    SRC->>MON: статус рейса: отмена
+    MON->>MON: нормализация, проверка свежести и дубля
+    MON->>SRC: перепроверка отмены во втором источнике
+    MON->>BUS: событие FlightCancelled
+    BUS->>NOT: FlightCancelled
+    NOT->>U: Рейс отменён, ищем варианты
+    BUS->>SRCH: FlightCancelled
+    SRCH->>SRCH: фильтры, ранжирование, топ-3
+    SRCH->>BUS: AlternativesReady
+    BUS->>NOT: AlternativesReady
+    NOT->>U: три варианта, срок актуальности 15 минут
+    U->>SRCH: выбор варианта
+    SRCH->>SRCH: удержание места, затем оплата
+    SRCH->>BUS: FlightRebooked
+    BUS->>PLAN: FlightRebooked
+    PLAN->>PLAN: проверка версии плана, сохранение новой версии
+    PLAN->>BUS: PlanUpdated
+    BUS->>NOT: PlanUpdated
+    NOT->>U: План обновлён
