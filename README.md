@@ -58,7 +58,7 @@ alfred-travel-monitoring/
 │   ├── 04-data-model.md
 │   ├── 05-exception-scenarios.md
 │   ├── 06-mvp.md
-│   └── 07-interview-prep.md
+│  
 └── diagrams/
     ├── architecture.mmd
     ├── sequence.mmd
