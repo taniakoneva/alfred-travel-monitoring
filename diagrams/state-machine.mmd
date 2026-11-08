@@ -1,0 +1,17 @@
+stateDiagram-v2
+    direction LR
+    state "Обнаружен" as Detected
+    state "Проверяется" as Verifying
+    state "Ожидает решения" as Waiting
+    state "Решён" as Resolved
+    state "Закрыт" as Closed
+
+    [*] --> Detected: пришло значимое изменение
+    Detected --> Verifying: событие принято
+    Verifying --> Closed: статус не подтвердился
+    Verifying --> Waiting: изменение подтверждено, пользователь уведомлён
+    Waiting --> Resolved: вариант выбран и план обновлён
+    Waiting --> Resolved: авиакомпания перебронировала, план обновлён
+    Waiting --> Closed: рейс снова по расписанию
+    Resolved --> Closed: поездка завершена
+    Closed --> [*]
